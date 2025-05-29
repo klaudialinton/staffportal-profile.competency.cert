@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Slip Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #f8f8f8;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            
+            border-bottom: 1px solid #ddd;
+        }
+        .navbar a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #1a73e8;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        .navbar a:hover {
+            color: #0d47a1;
+        }
+        .navbar .user-info {
+            margin-right: 20px;
+        }
+        .navbar .user-info a {
+            color: #333;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            height: calc(100% - 60px);
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+        .sidebar a {
+            display: block;
+            margin: 15px 0;
+            text-decoration: none;
+            color: #1a73e8;
+            font-weight: bold;
+        }
+        .sidebar a:hover {
+            color: #0d47a1;
+        }
+
+        /* Main Content */
+        .main-content {
+        
+        }
+
+        /* Certification List (Table) */
+        .cert-list {
+            border: 1px solid #000;
+            padding: 20px;
+            max-width: 100%;
+            width: 1000px;
+            margin: 20px auto;
+            background-color: #fff;
+        }
+        .cert-list h3 {
+            margin: 0 0 20px 0;
+            font-size: 18px;
+        }
+        .cert-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .cert-table th,
+        .cert-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            font-size: 14px;
+        }
+        .cert-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .cert-table td.cert-name {
+            min-width: 200px;
+        }
+        .cert-table td.cert-applied,
+        .cert-table td.cert-applied-at,
+        .cert-table td.cert-exp {
+            width: 150px;
+        }
+        .cert-table td input[type="text"],
+        .cert-table td input[type="date"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .cert-table .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Button Styles */
+        .edit-btn, .save-btn, .delete-btn, .view-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .edit-btn {
+            background-color: #1a73e8;
+            color: white;
+        }
+        .edit-btn:hover {
+            background-color: #0d47a1;
+        }
+        .save-btn {
+            background-color: #2e7d32;
+            color: white;
+        }
+        .save-btn:hover {
+            background-color: #1b5e20;
+        }
+        .delete-btn {
+            background-color: #d32f2f;
+            color: white;
+        }
+        .delete-btn:hover {
+            background-color: #b71c1c;
+        }
+        .view-btn {
+            background-color: #757575;
+            color: white;
+        }
+        .view-btn:hover {
+            background-color: #616161;
+        }
+
+        /* Add Certification Form */
+        .add-list {
+            border: 1px solid #000;
+            padding: 20px;
+            max-width: 100%;
+            width: 1000px;
+            margin: 20px auto;
+            background-color: #fff;
+        }
+        .add-list h3 {
+            margin: 0 0 20px 0;
+            font-size: 18px;
+        }
+        .add-list label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .add-list input[type="text"],
+        .add-list input[type="date"],
+        .add-list input[type="file"] {
+            width: 300px;
+            padding: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .add-btn {
+            background-color: #0b2d3e;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .add-btn:hover {
+            background-color: #0d47a1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 10px;
+            }
+            .cert-list,
+            .add-list {
+                width: 100%;
+                margin: 10px;
+            }
+            .add-list input[type="text"],
+            .add-list input[type="date"],
+            .add-list input[type="file"] {
+                width: 100%;
+            }
+            .cert-table {
+                display: block;
+                overflow-x: auto;
+            }
+            .cert-table th,
+            .cert-table td {
+                min-width: 100px;
+            }
+            .cert-table td.cert-name {
+                min-width: 150px;
+            }
+            .cert-table .action-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div>
+            <a href="#" aria-current="page">HOME</a>
+            <a href="#">PROFILE</a>
+            <a href="#">CALENDAR</a>
+            <a href="#">REQUEST FORM</a>
+        </div>
+        <div class="user-info">
+            Hi User, <a href="#" aria-label="Log out">Log Out</a>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" role="complementary" aria-label="Sidebar navigation">
+        <a href="#">PERSONAL</a>
+        <a href="#">COMPETENCY</a>
+        <a href="#" aria-current="page">CERTIFICATION</a>
+        <a href="#">PAY SLIP</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" role="main">
+        <section class="cert-list" aria-labelledby="cert-list-title">
+            <h3 id="cert-list-title">Competency Certification List</h3>
+            <table class="cert-table" role="grid">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Certificate Name</th>
+                        <th scope="col">Date of Applied</th>
+                        <th scope="col">Applied At</th>
+                        <th scope="col">Date of Expired</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-file="certificate1.pdf">
+                        <td>1</td>
+                        <td class="cert-name">Project Management Professional</td>
+                        <td class="cert-applied">2023-05-01</td>
+                        <td class="cert-applied-at">PMI Institute</td>
+                        <td class="cert-exp">2026-05-01</td>
+                        <td class="action-buttons">
+                            <button class="edit-btn" aria-label="Edit certification">Edit</button>
+                            <button class="view-btn" aria-label="View certificate">View</button>
+                        </td>
+                    </tr>
+                    <tr data-file="certificate2.pdf">
+                        <td>2</td>
+                        <td class="cert-name">Certified ScrumMaster</td>
+                        <td class="cert-applied">2022-12-15</td>
+                        <td class="cert-applied-at">Scrum Alliance</td>
+                        <td class="cert-exp">2025-12-15</td>
+                        <td class="action-buttons">
+                            <button class="edit-btn" aria-label="Edit certification">Edit</button>
+                            <button class="view-btn" aria-label="View certificate">View</button>
+                        </td>
+                    </tr>
+                    <tr data-file="certificate3.pdf">
+                        <td>3</td>
+                        <td class="cert-name">AWS Certified Solutions Architect</td>
+                        <td class="cert-applied">2024-03-10</td>
+                        <td class="cert-applied-at">AWS Training</td>
+                        <td class="cert-exp">2027-03-10</td>
+                        <td class="action-buttons">
+                            <button class="edit-btn" aria-label="Edit certification">Edit</button>
+                            <button class="view-btn" aria-label="View certificate">View</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="add-list" aria-labelledby="add-list-title">
+            <h3 id="add-list-title">Additional Certification</h3>
+            <form id="add-cert-form" enctype="multipart/form-data">
+                <div>
+                    <label for="cert-name">Certificate Name:</label>
+                    <input type="text" id="cert-name" name="cert_name" required>
+                </div>
+                <div>
+                    <label for="applied-date">Date of Applied:</label>
+                    <input type="date" id="applied-date" name="applied" required>
+                </div>
+                <div>
+                    <label for="applied-at">Applied At:</label>
+                    <input type="text" id="applied-at" name="applied_at" required>
+                </div>
+                <div>
+                    <label for="expired-date">Date of Expired:</label>
+                    <input type="date" id="expired-date" name="expired" required>
+                </div>
+                <div>
+                    <label for="attachment">Upload Attachment:</label>
+                    <input type="file" id="attachment" name="attachment" accept=".pdf,.jpg,.png" required>
+                </div>
+                <div>
+                    <button type="submit" class="add-btn">Add</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Update running numbers in the table
+        function updateRowNumbers() {
+            const rows = document.querySelectorAll('.cert-table tbody tr');
+            rows.forEach((row, index) => {
+                row.querySelector('td:first-child').textContent = index + 1;
+            });
+        }
+
+        // Handle form submission for adding new certifications
+        document.getElementById('add-cert-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get form values
+            const certName = document.getElementById('cert-name').value;
+            const appliedDate = document.getElementById('applied-date').value;
+            const appliedAt = document.getElementById('applied-at').value;
+            const expiredDate = document.getElementById('expired-date').value;
+            const fileInput = document.getElementById('attachment');
+            const fileName = fileInput.files[0] ? fileInput.files[0].name : 'No file uploaded';
+
+            // Basic validation
+            if (!certName || !appliedDate || !appliedAt || !expiredDate || !fileInput.files[0]) {
+                alert('Please fill out all fields and upload a file.');
+                return;
+            }
+
+            // Create new certification row
+            const certTableBody = document.querySelector('.cert-table tbody');
+            const newRow = document.createElement('tr');
+            const index = certTableBody.querySelectorAll('tr').length + 1;
+            newRow.setAttribute('data-file', fileName);
+            newRow.innerHTML = `
+                <td>${index}</td>
+                <td class="cert-name">${certName}</td>
+                <td class="cert-applied">${appliedDate}</td>
+                <td class="cert-applied-at">${appliedAt}</td>
+                <td class="cert-exp">${expiredDate}</td>
+                <td class="action-buttons">
+                    <button class="edit-btn" aria-label="Edit certification">Edit</button>
+                    <button class="view-btn" aria-label="View certificate">View</button>
+                </td>
+            `;
+            certTableBody.appendChild(newRow);
+
+            // Reset form
+            this.reset();
+            alert('Certification added successfully!');
+        });
+
+        // Handle edit, save, delete, and view actions
+        document.querySelector('.cert-table').addEventListener('click', function(event) {
+            const button = event.target;
+            const row = button.closest('tr');
+
+            if (button.classList.contains('edit-btn')) {
+                // Store current values
+                const certName = row.querySelector('.cert-name').textContent;
+                const appliedDate = row.querySelector('.cert-applied').textContent;
+                const appliedAt = row.querySelector('.cert-applied-at').textContent;
+                const expiredDate = row.querySelector('.cert-exp').textContent;
+
+                // Convert row to input fields
+                row.innerHTML = `
+                    <td>${row.querySelector('td:first-child').textContent}</td>
+                    <td class="cert-name"><input type="text" value="${certName}" required></td>
+                    <td class="cert-applied"><input type="date" value="${appliedDate}" required></td>
+                    <td class="cert-applied-at"><input type="text" value="${appliedAt}" required></td>
+                    <td class="cert-exp"><input type="date" value="${expiredDate}" required></td>
+                    <td class="action-buttons">
+                        <button class="save-btn" aria-label="Save changes">Save</button>
+                        <button class="delete-btn" aria-label="Delete certification">Delete</button>
+                    </td>
+                `;
+            } else if (button.classList.contains('save-btn')) {
+                // Get input values
+                const inputs = row.querySelectorAll('input');
+                const certName = inputs[0].value;
+                const appliedDate = inputs[1].value;
+                const appliedAt = inputs[2].value;
+                const expiredDate = inputs[3].value;
+
+                // Basic validation
+                if (!certName || !appliedDate || !appliedAt || !expiredDate) {
+                    alert('Please fill out all fields.');
+                    return;
+                }
+
+                // Update row with new values
+                const index = row.querySelector('td:first-child').textContent;
+                row.innerHTML = `
+                    <td>${index}</td>
+                    <td class="cert-name">${certName}</td>
+                    <td class="cert-applied">${appliedDate}</td>
+                    <td class="cert-applied-at">${appliedAt}</td>
+                    <td class="cert-exp">${expiredDate}</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" aria-label="Edit certification">Edit</button>
+                        <button class="view-btn" aria-label="View certificate">View</button>
+                    </td>
+                `;
+                alert('Certification updated successfully!');
+            } else if (button.classList.contains('delete-btn')) {
+                // Remove row and update row numbers
+                row.remove();
+                updateRowNumbers();
+                alert('Certification deleted successfully!');
+            } else if (button.classList.contains('view-btn')) {
+                // Simulate viewing the file (display file name)
+                const fileName = row.getAttribute('data-file');
+                alert(`Viewing certificate: ${fileName}\n(Note: Actual file viewing requires a backend.)`);
+            }
+        });
+    </script>
+</body>
+</html>
